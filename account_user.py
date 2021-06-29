@@ -13,11 +13,6 @@ db = SQLAlchemy()
 login_manager = LoginManager()
 
 
-@blueprint.route('/user')
-def get_user():
-    return 'Тест пройден'
-
-
 @login_manager.user_loader
 def load_user(user_id):
     return Users.query.get(user_id)
@@ -30,16 +25,15 @@ def login():
         if user and user.check_password(request.form['password']):
             login_user(user, remember=request.form.get('check', False))
             return redirect("/")
-        return render_template('base.html', message="Неправильный логин или пароль")
-    return render_template('base.html')
+        return render_template('login.html', message="Неправильный логин или пароль")
+    return render_template('login.html')
 
 
 @blueprint.route('/register', methods=['POST', 'GET'])
 def register():
     if request.method == 'POST':
         user = Users()
-        user.surname = request.form['surname']
-        user.name = request.form['name']
+        user.login = request.form['login']
         user.email = request.form['email']
         user.set_password(request.form['password'])
         db.session.add(user)
@@ -61,12 +55,9 @@ def logout():
 def personal_account():
     user = Users.query.filter(Users.id == current_user.id).first()
     if request.method == 'POST':
-        user.surname = request.form['surname']
-        user.name = request.form['name']
+        user.login = request.form['login']
         user.image = request.form['image']
         user.mailing = True if request.form.get('check', False) else False
         db.session.merge(user)
         db.session.commit()
-    image = user.image if user.image else ''
-    checked = 'checked' if bool(user.mailing) else ''
-    return render_template('personal_account.html', user=user, image=image, checked=checked)
+    return render_template('personal_account.html', user=user)

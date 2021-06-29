@@ -9,8 +9,7 @@ db = SQLAlchemy()
 
 class Users(db.Model, UserMixin, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.Text, nullable=False)
-    surname = db.Column(db.Text, nullable=False)
+    login = db.Column(db.Text, nullable=False)
     email = db.Column(db.Text, nullable=False)
     password = db.Column(db.Text, nullable=False)
     created_date = db.Column(db.DateTime, nullable=False, default=datetime.datetime.utcnow)
