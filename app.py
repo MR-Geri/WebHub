@@ -1,9 +1,6 @@
 import account_user
-from flask import Flask, render_template, url_for, request
+from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
-
-from models.users import Users
-
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
